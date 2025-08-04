@@ -46,6 +46,6 @@ git clone
 cd mini-ubereats
 
 👨‍💻 Autores
-Tu Priscila Chisag – Estudiante de Ingeniería en Sistemas Distribuidos
+Tu Priscila Chisag – Estudiante de Ingeniería en Sistemas 
 
 Contacto: pvchisag@uce.edu.ec
