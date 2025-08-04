@@ -49,3 +49,16 @@ cd mini-ubereats
 Tu Priscila Chisag – Estudiante de Ingeniería en Sistemas 
 
 Contacto: pvchisag@uce.edu.ec
+
+crear docker ec2
+#!/bin/bash
+# Actualiza la instancia
+yum update -y
+
+# Instala Docker
+amazon-linux-extras install docker -y
+yum install -y docker
+
+# Inicia Docker
+systemctl start docker
+systemctl enable docker
