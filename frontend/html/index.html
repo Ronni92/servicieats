@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mini-Pedidos</title>
+</head>
+<body>
+  <h2>📦 Realizar Pedido</h2>
+  <form id="pedido-form">
+    <input type="text" id="cliente" placeholder="Cliente" required />
+    <input type="text" id="plato" placeholder="Plato" required />
+    <input type="number" id="cantidad" placeholder="Cantidad" required min="1" />
+    <button type="submit">Enviar Pedido</button>
+  </form>
+  <div id="mensaje"></div>
+
+  <script>
+    document.getElementById('pedido-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const cliente = document.getElementById('cliente').value;
+      const plato = document.getElementById('plato').value;
+      const cantidad = parseInt(document.getElementById('cantidad').value);
+
+      try {
+        const res = await fetch('/pedido', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cliente, plato, cantidad })
+        });
+        const data = await res.json();
+        document.getElementById('mensaje').innerText = data.mensaje || 'Éxito';
+      } catch (err) {
+        document.getElementById('mensaje').innerText = 'Error de conexión al servidor';
+      }
+    });
+  </script>
+</body>
+</html>

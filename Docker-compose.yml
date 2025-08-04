@@ -1,0 +1,69 @@
+services:
+  postgres-db:
+    image: postgres:14
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postegres01
+      POSTGRES_DB: pedidosdb
+    ports:
+      - "5432:5432"
+    networks:
+      - miniubereats-net
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - miniubereats-net
+  pedido-service:
+    build:
+      context: ./pedido-service
+    container_name: pedido-service
+    ports:
+      - "3000:3000"
+    networks:
+      - miniubereats-net
+    depends_on:
+      - postgres-db
+      - rabbitmq
+    restart: always
+
+  inventario-service:
+    build:
+      context: ./inventario-service
+    container_name: inventario-service
+    ports:
+      - "5001:5001"
+    networks:
+      - miniubereats-net
+    depends_on:
+      - postgres-db
+      - rabbitmq
+    environment:
+      DB_HOST: postgres-db
+      DB_PORT: 5432
+      DB_NAME: pedidosdb
+      DB_USER: postgres
+      DB_PASSWORD: postegres01
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+
+  frontend-nginx:
+    build:
+      context: ./frontend
+    container_name: frontend-nginx
+    ports:
+      - "8080:80"
+    networks:
+      - miniubereats-net
+    depends_on:
+      - pedido-service
+      - inventario-service
+
+networks:
+  miniubereats-net:
+    driver: bridge
